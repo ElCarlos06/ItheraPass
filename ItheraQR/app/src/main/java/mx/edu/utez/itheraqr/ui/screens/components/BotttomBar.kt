@@ -1,5 +1,7 @@
 package mx.edu.utez.itheraqr.ui.screens.components
 
+import QueueItem
+import Scan
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,12 +24,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.itheraqr.R
+import mx.edu.utez.itheraqr.ui.components.ScanCamera
+
+private const val ROUTE_HOME = "home"
+private const val ROUTE_SCAN = "scan"
+private const val ROUTE_ROWS = "rows"
+private const val ROUTE_MANAGE = "manage"
+private const val ROUTE_CAMERA = "scan_camera"
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BotttomBar() {
-    var seleccionado by remember { mutableStateOf(0) }
+    val navController = rememberNavController()
+    var scannedCode by remember { mutableStateOf<String?>(null) }
+    val sample = listOf(
+        QueueItem("Cafe \"El halcon\"", "Cafetería", 18, 45),
+        QueueItem("Cafe \"El balcon\"", "Cafetería", 8, 32),
+        QueueItem("Tacos de Oscar", "Restaurante", 15, 58),
+        QueueItem("Cinepolis", "Cine", 6, 47)
+    )
+
     //ya respeta lso elementos del tel (statu8s bar)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -36,8 +58,8 @@ fun BotttomBar() {
         bottomBar = {
             BottomAppBar {
                 NavigationBarItem(
-                    selected = seleccionado == 0,
-                    onClick = {seleccionado = 0},
+                    selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_HOME,
+                    onClick = { navController.navigate(ROUTE_HOME) { launchSingleTop = true } },
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
@@ -51,8 +73,8 @@ fun BotttomBar() {
                     }
                 )
                 NavigationBarItem(
-                    selected = seleccionado ==1,
-                    onClick = {seleccionado = 1},
+                    selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_SCAN,
+                    onClick = { navController.navigate(ROUTE_SCAN) { launchSingleTop = true } },
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painter = painterResource(id = R.drawable.qr), contentDescription = "Scan", modifier = Modifier.size(24.dp))
@@ -61,8 +83,8 @@ fun BotttomBar() {
                     },
                 )
                 NavigationBarItem(
-                    selected = seleccionado==2,
-                    onClick = {seleccionado = 2},
+                    selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_ROWS,
+                    onClick = { navController.navigate(ROUTE_ROWS) { launchSingleTop = true } },
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painter = painterResource(id = R.drawable.rows), contentDescription = "Rows", modifier = Modifier.size(24.dp))
@@ -71,8 +93,8 @@ fun BotttomBar() {
                     }
                 )
                 NavigationBarItem(
-                    selected = seleccionado==3,
-                    onClick = {seleccionado = 3},
+                    selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_MANAGE,
+                    onClick = { navController.navigate(ROUTE_MANAGE) { launchSingleTop = true } },
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painter = painterResource(id = R.drawable.business), contentDescription = "Business", modifier = Modifier.size(24.dp))
@@ -84,15 +106,47 @@ fun BotttomBar() {
         }
 
     ) { innerpadding ->
-        Box(
+        NavHost(
+            navController = navController,
+            startDestination = ROUTE_HOME,
             modifier = Modifier.padding(innerpadding)
-        ){
-            when(seleccionado){
-                0 -> Home()
-                1 -> Scan()
-                2 -> Rows()
-                3 -> Manage()
+        ) {
+            composable(ROUTE_HOME) {
+                // Pasamos un lambda que navega a la pantalla Scan
+                Home(onOpenScan = { navController.navigate(ROUTE_SCAN) },
+                    onOpenManage = {navController.navigate(ROUTE_MANAGE)})
             }
+            composable(ROUTE_ROWS) {
+                Rows()
+            }
+
+            composable(ROUTE_MANAGE) {
+                Manage()
+            }
+
+            composable(ROUTE_SCAN) {
+                Scan(
+                    items = sample,
+                    onScan = {navController.navigate(ROUTE_CAMERA)},
+                    scannedCode = scannedCode,
+                    onJoin = { item -> /* unir a fila, mostrar snackbar o navegar */ }
+                )
+            }
+
+            // nueva ruta para la cámara (pantalla completa)
+            composable(ROUTE_CAMERA) {
+                ScanCamera(
+                    onScanned = { code ->
+                        scannedCode = code
+                        navController.popBackStack()
+                        // navController.navigate("detail/$code")  // si tienes detalle
+                    },
+                    onClose = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
         }
     }
 }

@@ -29,13 +29,13 @@ import androidx.compose.ui.unit.sp
 import mx.edu.utez.itheraqr.R
 
 @Composable
-fun Home() {
+fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}) {
 
     Column(Modifier.padding(24.dp)) {
         Text(text = "Más facil, más organizado", fontSize = 18.sp)
         Text(text = "Gestiona las filas de manera inteligente", fontSize = 15.sp)
 
-        Card(modifier = Modifier.padding(vertical = 8.dp)) {
+        Card(modifier = Modifier.padding(vertical = 8.dp), onClick = onOpenScan) {
             Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(modifier = Modifier.size(50.dp).clip(RoundedCornerShape(14.dp)).background(Color(0xFF155DFC)),
                     contentAlignment = Alignment.Center
@@ -52,7 +52,7 @@ fun Home() {
             }
         }
 
-        Card(modifier = Modifier.padding(vertical = 8.dp), onClick = {}) {
+        Card(modifier = Modifier.padding(vertical = 8.dp), onClick = onOpenManage) {
             Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(modifier = Modifier.size(50.dp).clip(RoundedCornerShape(14.dp)).background(Color(
                     0xFF00A63E
@@ -88,7 +88,7 @@ fun Home() {
             Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(Color(0xFF155DFC)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "1", color = Color.White)
+                Text(text = "2", color = Color.White)
             }
             Spacer(Modifier.width(12.dp))
             Text(text = "Espera cómodamente donde quieras")
@@ -98,7 +98,7 @@ fun Home() {
             Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(Color(0xFF155DFC)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "1", color = Color.White)
+                Text(text = "3", color = Color.White)
             }
             Spacer(Modifier.width(12.dp))
             Text(text = "Recibe notificaciones del avance")

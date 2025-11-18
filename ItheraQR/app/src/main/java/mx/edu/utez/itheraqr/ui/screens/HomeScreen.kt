@@ -18,7 +18,6 @@ fun HomeScreen() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.statusBarsPadding().fillMaxSize()
-            .background(color = Color(0xFFFFFFFF))
     ) {
         Header()
 
