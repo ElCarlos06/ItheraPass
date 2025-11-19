@@ -19,7 +19,6 @@ fun HomeScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.statusBarsPadding().fillMaxSize()
     ) {
-        Header()
 
         BotttomBar()
     }
