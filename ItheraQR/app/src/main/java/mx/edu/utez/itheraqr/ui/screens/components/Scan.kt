@@ -25,8 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import mx.edu.utez.itheraqr.ui.components.ScanCamera
+import mx.edu.utez.itheraqr.ui.theme.primary
+import mx.edu.utez.itheraqr.ui.theme.tertiary
 
-data class QueueItem(val name: String, val category: String, val inQueue: Int, val attended: Int)
+data class QueueItem(val name: String, val category: String, val inQueue: Int, val attended: Int)///pediente
 
 @Composable
 fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, onJoin: (QueueItem) -> Unit = {}) {
@@ -34,6 +36,7 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier
         .fillMaxSize()
         .padding(24.dp)) {
+        //item obligatorio para la manipulacion en el lazy
         item {
             Card {
                 Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -54,7 +57,7 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
                             .fillMaxWidth()
                             .height(48.dp),
                         shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF155DFC))
+                        colors = ButtonDefaults.buttonColors(backgroundColor = tertiary)
                     ) {
                         Text(text = "Escanear código de la fila", color = Color.White)
                     }
@@ -63,6 +66,7 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
             }
         }
 
+        //textfield para la busqueda
         item {
             TextField(
                 value = query,
@@ -74,9 +78,11 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
             Text(text = "Filas Registradas", fontSize = 18.sp)
         }
 
+        //sistema para filtrar las busquedas
         val filtered = if (query.isBlank()) items else items.filter {
             it.name.contains(query, true) || it.category.contains(query, true)
         }
+        //items como foreach en el lazy
         items(filtered) { item ->
             Card(shape = RoundedCornerShape(8.dp), elevation = CardDefaults.cardElevation(defaultElevation = 2.dp), modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -89,14 +95,16 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
                             Text(text = "Atendidos: ${item.attended}", fontSize = 10.sp)
                         }
                     }
-                    Button(onClick = { onJoin(item) }, modifier = Modifier.height(36.dp), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF155DFC))) {
+                    Button(onClick = { onJoin(item) }, modifier = Modifier.height(36.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = primary)
+                        ) {
                         Text(text = "Unirse", color = Color.White)
                     }
                 }
             }
         }
 
-        // último item: mostrar el código escaneado (solo para comprobación)
+        // último item: mostrar el código escaneado (solo para comprobación lo voy a quitar w)
         item {
             Spacer(modifier = Modifier.height(8.dp))
             val textToShow = scannedCode ?: "No se ha escaneado ningún QR aún"

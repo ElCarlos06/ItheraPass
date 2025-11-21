@@ -28,9 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mx.edu.utez.itheraqr.R
 import mx.edu.utez.itheraqr.ui.screens.home.ActionCard
+import mx.edu.utez.itheraqr.ui.theme.primary
+import mx.edu.utez.itheraqr.ui.theme.secondary
 
 @Composable
 fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}) {
+    //Lista de pasos optimizada
     val pasosUso = listOf(
         "Escanea el código QR del negocio",
         "Espera cómodamente donde quieras",
@@ -42,9 +45,10 @@ fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}) {
         Text(text = "Más facil, más organizado", fontSize = 18.sp)
         Text(text = "Gestiona las filas de manera inteligente", fontSize = 15.sp)
 
+        //componentes de Card reutilizable
         ActionCard(
             iconRes = R.drawable.qr,
-            iconBackground = Color(0xFF155DFC),
+            iconBackground = primary, //uso de los temas globales
             title = "Unirse a una fila",
             subtitle = "Utilice la cámara para escanear el QR del negocio para formar parte de la fila virtual",
             onClick = onOpenScan
@@ -52,7 +56,7 @@ fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}) {
 
         ActionCard(
             iconRes = R.drawable.business,
-            iconBackground = Color(0xFF00A63E),
+            iconBackground = secondary, //uso de los temas globales
             title = "Gestionar fila",
             subtitle = "Accede a las herramientas para administrar tu fila y notificar clientes",
             onClick = onOpenManage
@@ -60,9 +64,10 @@ fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}) {
 
         Text(text = "¿Como funciona?")
 
-        pasosUso.forEachIndexed { index, paso ->
+        //lista optimizada
+        pasosUso.forEachIndexed { index, paso ->//indexeado para la numeracion
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 12.dp)) {
-                Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(Color(0xFF155DFC)),
+                Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(text = "${index+1}", color = Color.White)

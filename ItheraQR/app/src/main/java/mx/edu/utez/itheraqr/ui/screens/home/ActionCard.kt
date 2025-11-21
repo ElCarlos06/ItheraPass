@@ -74,10 +74,12 @@ fun ActionCard(
                 Text(
                     text = title,
                     fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = subtitle,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         }

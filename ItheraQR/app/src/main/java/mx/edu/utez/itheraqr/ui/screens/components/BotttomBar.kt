@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,7 +41,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.itheraqr.R
 import mx.edu.utez.itheraqr.ui.components.ScanCamera
+import mx.edu.utez.itheraqr.ui.theme.primary
 
+//valores de navegacion
 private const val ROUTE_HOME = "home"
 private const val ROUTE_SCAN = "scan"
 private const val ROUTE_ROWS = "rows"
@@ -51,8 +54,10 @@ private const val ROUTE_CAMERA = "scan_camera"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BotttomBar() {
+    //uso del nav
     val navController = rememberNavController()
     var scannedCode by remember { mutableStateOf<String?>(null) }
+    ///lista de ejemplo
     val sample = listOf(
         QueueItem("Cafe \"El halcon\"", "Cafetería", 18, 45),
         QueueItem("Cafe \"El balcon\"", "Cafetería", 8, 32),
@@ -64,6 +69,7 @@ fun BotttomBar() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         ///minusculas atributo mayus componente
+        //header queda pendiente borrar el component
         topBar = {
             TopAppBar(
                 modifier = Modifier.height(80.dp),
@@ -73,6 +79,7 @@ fun BotttomBar() {
                         Text(text = "Filas virtuales", color = Color.White, fontStyle = FontStyle.Italic)
                     }
                         },
+                //si no va a hacer nada quitar el onclick
                 navigationIcon = {
                     IconButton(onClick = { /* acción */ }) {
                         Icon(painter = painterResource(id = R.drawable.logo),
@@ -83,15 +90,16 @@ fun BotttomBar() {
                     }
                 },
 
+                ///establecer menu lateral para las notis y para el logout
                 actions = {
                     IconButton(onClick = { /* acción */ }) {
                         Icon(Icons.Default.Menu, contentDescription = "Opciones", tint = Color.White)
                     }
                 },
-                backgroundColor = Color(0xFF1447E6)
+                backgroundColor = primary
             )
         },
-
+        //navbarbottom
         bottomBar = {
             BottomAppBar {
                 NavigationBarItem(
@@ -143,6 +151,7 @@ fun BotttomBar() {
         }
 
     ) { innerpadding ->
+        ///navegacion por el navigation
         NavHost(
             navController = navController,
             startDestination = ROUTE_HOME,
@@ -165,17 +174,16 @@ fun BotttomBar() {
                     items = sample,
                     onScan = {navController.navigate(ROUTE_CAMERA)},
                     scannedCode = scannedCode,
-                    onJoin = { item -> /* unir a fila, mostrar snackbar o navegar */ }
+                    onJoin = { item -> /* pa unirse a las filas */ }
                 )
             }
 
-            // nueva ruta para la cámara (pantalla completa)
             composable(ROUTE_CAMERA) {
                 ScanCamera(
                     onScanned = { code ->
                         scannedCode = code
                         navController.popBackStack()
-                        // navController.navigate("detail/$code")  // si hay detalle
+                        // navController.navigate("detail/$code")  // algo asi vamos a ocupar w
                     },
                     onClose = {
                         navController.popBackStack()

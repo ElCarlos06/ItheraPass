@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import mx.edu.utez.itheraqr.R
 
-//Ya no c va a ocpar XDDD
+//Ya no c va a ocpar XDDD en toeria
 @Composable
 fun Header() {
         Row(
