@@ -51,6 +51,9 @@ dependencies {
 
     implementation(libs.androidx.activity.compose.v172)
 
+    //cracion qr
+    implementation(libs.core)
+
     implementation(libs.ui)
     implementation(libs.androidx.material)
     implementation(libs.androidx.material3.vmaterial3version)

@@ -35,7 +35,9 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
     var query by remember { mutableStateOf("") }
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier
         .fillMaxSize()
-        .padding(24.dp)) {
+        .padding(horizontal = 24.dp)) {
+        item {
+        }
         //item obligatorio para la manipulacion en el lazy
         item {
             Card {
@@ -109,6 +111,9 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
             Spacer(modifier = Modifier.height(8.dp))
             val textToShow = scannedCode ?: "No se ha escaneado ningún QR aún"
             Text(text = "Último QR leído: $textToShow", modifier = Modifier.padding(vertical = 8.dp))
+        }
+
+        item {
         }
     }
 

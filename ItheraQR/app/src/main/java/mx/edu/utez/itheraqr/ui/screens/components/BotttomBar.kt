@@ -174,7 +174,7 @@ fun BotttomBar() {
                     items = sample,
                     onScan = {navController.navigate(ROUTE_CAMERA)},
                     scannedCode = scannedCode,
-                    onJoin = { item -> /* pa unirse a las filas */ }
+                    onJoin = { navController.navigate(ROUTE_ROWS) }
                 )
             }
 
