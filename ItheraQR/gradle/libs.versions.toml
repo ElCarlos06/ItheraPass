@@ -17,6 +17,10 @@ material3Version = "<material3_version>"
 materialIconsExtended = "<compose_version>"
 ui = "<compose_version>"
 navigationCompose = "2.9.6"
+roomCompiler = "2.8.4"
+roomKtx = "2.8.4"
+roomRuntime = "2.8.4"
+volley = "1.2.1"
 
 [libraries]
 androidx-activity-compose-v172 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -46,9 +50,14 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.25" }
 

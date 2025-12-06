@@ -6,6 +6,7 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -21,11 +22,25 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ItheraQR">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- esto es para los Deep links -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- url de la cosa: https://www.itherapass.com/fila -->
+                <data
+                    android:scheme="https"
+                    android:host="www.itherapass.com"
+                    android:pathPrefix="/fila" />
+            </intent-filter>
+
         </activity>
     </application>
 

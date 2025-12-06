@@ -35,12 +35,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.itheraqr.R
 import mx.edu.utez.itheraqr.ui.components.ScanCamera
+import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
 import mx.edu.utez.itheraqr.ui.theme.primary
 
 //valores de navegacion
@@ -64,6 +66,8 @@ fun BotttomBar() {
         QueueItem("Tacos de Oscar", "Restaurante", 15, 58),
         QueueItem("Cinepolis", "Cine", 6, 47)
     )
+
+    val filaViewModel: FilaViewModel = viewModel()
 
     //ya respeta lso elementos del tel (statu8s bar)
     Scaffold(
@@ -166,11 +170,17 @@ fun BotttomBar() {
             }
 
             composable(ROUTE_MANAGE) {
-                Manage()
+                Manage(
+                    viewModel = filaViewModel,
+                    onInsert = {texto,a,b,c,d ->
+                        //filaViewModel.insertarFila(texto,a)
+                    }
+                )
             }
 
             composable(ROUTE_SCAN) {
                 Scan(
+                    viewModel = filaViewModel,
                     items = sample,
                     onScan = {navController.navigate(ROUTE_CAMERA)},
                     scannedCode = scannedCode,

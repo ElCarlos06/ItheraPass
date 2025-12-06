@@ -25,13 +25,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import mx.edu.utez.itheraqr.ui.components.ScanCamera
+import mx.edu.utez.itheraqr.ui.screens.components.scan.FilaList
+import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
 import mx.edu.utez.itheraqr.ui.theme.primary
 import mx.edu.utez.itheraqr.ui.theme.tertiary
 
 data class QueueItem(val name: String, val category: String, val inQueue: Int, val attended: Int)///pediente
 
 @Composable
-fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, onJoin: (QueueItem) -> Unit = {}) {
+fun Scan(viewModel: FilaViewModel,items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, onJoin: (QueueItem) -> Unit = {}) {
+    //val filas by viewModel.filaState.collectAsState()
     var query by remember { mutableStateOf("") }
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier
         .fillMaxSize()
@@ -85,26 +88,7 @@ fun Scan(items: List<QueueItem>, onScan: () -> Unit = {},scannedCode: String?, o
             it.name.contains(query, true) || it.category.contains(query, true)
         }
         //items como foreach en el lazy
-        items(filtered) { item ->
-            Card(shape = RoundedCornerShape(8.dp), elevation = CardDefaults.cardElevation(defaultElevation = 2.dp), modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(text = item.name, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        Text(text = item.category, fontSize = 12.sp, color = Color.Gray)
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Row {
-                            Text(text = "En fila: ${item.inQueue}", modifier = Modifier.padding(end = 12.dp), fontSize = 10.sp)
-                            Text(text = "Atendidos: ${item.attended}", fontSize = 10.sp)
-                        }
-                    }
-                    Button(onClick = { onJoin(item) }, modifier = Modifier.height(36.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = primary)
-                        ) {
-                        Text(text = "Unirse", color = Color.White)
-                    }
-                }
-            }
-        }
+
 
         // último item: mostrar el código escaneado (solo para comprobación lo voy a quitar w)
         item {

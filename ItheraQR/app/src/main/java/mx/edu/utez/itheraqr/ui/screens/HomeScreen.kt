@@ -11,10 +11,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import mx.edu.utez.itheraqr.ui.screens.components.BotttomBar
 import mx.edu.utez.itheraqr.ui.screens.components.Header
+import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
 import mx.edu.utez.itheraqr.ui.theme.ItheraQRTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(viewModel: FilaViewModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.statusBarsPadding().fillMaxSize()
@@ -23,12 +24,4 @@ fun HomeScreen() {
         BotttomBar()
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomePreview(){
-    ItheraQRTheme {
-        HomeScreen()
-    }
 }

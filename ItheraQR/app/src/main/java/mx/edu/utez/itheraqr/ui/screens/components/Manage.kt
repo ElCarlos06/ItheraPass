@@ -47,13 +47,20 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import mx.edu.utez.itheraqr.ui.screens.components.manage.generarQr
+import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
 import mx.edu.utez.itheraqr.ui.theme.primary
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Manage() {
+fun Manage(viewModel: FilaViewModel, onInsert:(String, Int, Int, Int, Int)-> Unit) {
     //preuba de creacion de qr
     var qrBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    var nombre by remember { mutableStateOf("") }
+    var categoria by remember { mutableStateOf(0) }
+    var capacidad by remember { mutableStateOf(0) }
+    var formados by remember { mutableStateOf(0) }
+    var atendidos by remember { mutableStateOf(0) }
 
     var switchOpciones by remember { mutableStateOf(false) }
     var nombreNegocio by remember { mutableStateOf("") }
@@ -126,6 +133,8 @@ fun Manage() {
                     Button(onClick = {
                         if (nombreNegocio.isNotBlank()) {
                             qrBitmap = generarQr(nombreNegocio, 512, 512)
+                            onInsert(nombre, categoria, capacidad, formados, atendidos)
+                            //viewModel.insertarFila(nombre,categoria)
                         } else {
                             qrBitmap = null
                         }
@@ -179,10 +188,4 @@ fun Manage() {
             num++
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun asd(){
-    Manage()
 }
