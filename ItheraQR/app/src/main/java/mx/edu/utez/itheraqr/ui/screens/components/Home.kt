@@ -32,8 +32,7 @@ fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}, viewModel: 
     //Lista de pasos optimizada
     val pasosUso = listOf(
         "Escanea el código QR del negocio",
-        "Espera cómodamente donde quieras",
-        "Recibe notificaciones del avance"
+        "Espera cómodamente donde quieras"
     )
 
     val filas by viewModel.listaFilas.collectAsState()

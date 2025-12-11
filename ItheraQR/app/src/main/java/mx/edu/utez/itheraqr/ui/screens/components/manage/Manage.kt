@@ -97,11 +97,10 @@ fun Manage(viewModel: FilaViewModel) {
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Acciones Rápidas")
+                        Text("Acciones Rápidas", fontWeight = FontWeight.SemiBold)
                         IconButton(onClick = { viewModel.cargarTurnos() }) {
                             Icon(Icons.Default.Refresh, contentDescription = "Recargar", tint = MaterialTheme.colorScheme.primary)
                         }
-                        // ¡NUEVO! Botón Borrar Fila
                         IconButton(onClick = { showDialog = true }) {
                             Icon(Icons.Default.Delete, contentDescription = "Borrar Fila", tint = Color.Red)
                         }
@@ -111,7 +110,7 @@ fun Manage(viewModel: FilaViewModel) {
                         val hayGente = turnos.any { it.estado == "EN_ESPERA" }
 
                         ActionButton(
-                            icon = Icons.Default.NotificationsActive,
+                            icon = Icons.Default.Groups,
                             label = "Atender",
                             color = if(hayGente) Color(0xFF66BB6A) else Color.Gray,
                             onClick = {
