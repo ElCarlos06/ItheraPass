@@ -1,7 +1,6 @@
 package mx.edu.utez.itheraqr.data.network.repository
 
 import android.content.Context
-// CORRECCIÓN: Cambiamos 'local.model' por 'network.model' para que coincida con el API y el DAO
 import mx.edu.utez.itheraqr.data.network.model.Fila
 import mx.edu.utez.itheraqr.data.network.api.FilaAPI
 import mx.edu.utez.itheraqr.data.network.dao.FilaDao
@@ -30,7 +29,7 @@ class FilaRepository(context: Context) : FilaDao {
     // 3. CREAR UNA NUEVA FILA
     override fun create(
         fila: Fila,
-        onSuccess: () -> Unit,
+        onSuccess: (Int) -> Unit,
         onError: (String) -> Unit
     ) {
         api.create(fila, onSuccess, onError)
@@ -45,14 +44,8 @@ class FilaRepository(context: Context) : FilaDao {
         api.delete(id, onSuccess, onError)
     }
 
-
-    //deep links
-    fun formarse(
-        idFila: String,
+    fun getMisFilas(
         idUsuario: String,
-        onSuccess: (Boolean) -> Unit,
-        onError: (String) -> Unit
-    ) {
-        api.formarse(idFila, idUsuario, onSuccess, onError)
-    }
+        onSuccess: (List<Fila>) -> Unit,
+        onError: (String) -> Unit) = api.getMisFilas(idUsuario, onSuccess, onError)
 }

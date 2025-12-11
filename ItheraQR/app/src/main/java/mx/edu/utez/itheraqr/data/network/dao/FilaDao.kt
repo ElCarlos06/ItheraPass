@@ -1,6 +1,7 @@
 package mx.edu.utez.itheraqr.data.network.dao
 
 import mx.edu.utez.itheraqr.data.network.model.Fila
+import mx.edu.utez.itheraqr.data.network.model.Turno
 
 interface FilaDao {
     // Obtener todas las filas
@@ -19,7 +20,7 @@ interface FilaDao {
     // Crear una nueva Fila
     fun create(
         fila: Fila,
-        onSuccess: () -> Unit,
+        onSuccess: (Int) -> Unit,
         onError: (String) -> Unit
     )
 

@@ -1,12 +1,8 @@
 package mx.edu.utez.itheraqr.ui.screens.components
 
-import QueueItem
 import Scan
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,7 +11,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -41,7 +35,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.itheraqr.R
+import mx.edu.utez.itheraqr.data.network.model.Fila
 import mx.edu.utez.itheraqr.ui.components.ScanCamera
+import mx.edu.utez.itheraqr.ui.screens.components.manage.Create
+import mx.edu.utez.itheraqr.ui.screens.components.manage.Manage
 import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
 import mx.edu.utez.itheraqr.ui.theme.primary
 
@@ -49,8 +46,9 @@ import mx.edu.utez.itheraqr.ui.theme.primary
 private const val ROUTE_HOME = "home"
 private const val ROUTE_SCAN = "scan"
 private const val ROUTE_ROWS = "rows"
+private const val ROUTE_CREATE = "create"
+private const val ROUTE_CAMERA = "camera"
 private const val ROUTE_MANAGE = "manage"
-private const val ROUTE_CAMERA = "scan_camera"
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,20 +56,16 @@ private const val ROUTE_CAMERA = "scan_camera"
 fun BotttomBar() {
     //uso del nav
     val navController = rememberNavController()
-    var scannedCode by remember { mutableStateOf<String?>(null) }
+    // guardar el qr
+    var scannedCode by remember { mutableStateOf("") }
     ///lista de ejemplo
-    val sample = listOf(
-        QueueItem("Cafe \"El halcon\"", "Cafetería", 18, 45),
-        QueueItem("Cafe \"El balcon\"", "Cafetería", 8, 32),
-        QueueItem("Tacos de Oscar", "Restaurante", 15, 58),
-        QueueItem("Cinepolis", "Cine", 6, 47)
-    )
+    val sample = emptyList<Fila>()
 
     val filaViewModel: FilaViewModel = viewModel()
 
     //ya respeta lso elementos del tel (statu8s bar)
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        //modifier = Modifier.fillMaxSize(),
         ///minusculas atributo mayus componente
         //header queda pendiente borrar el component
         topBar = {
@@ -80,26 +74,24 @@ fun BotttomBar() {
                 title = {
                     Column(verticalArrangement = Arrangement.Center) {
                         Text(text = "ItheraPass", color = Color.White, fontWeight = FontWeight.Bold)
-                        Text(text = "Filas virtuales", color = Color.White, fontStyle = FontStyle.Italic)
-                    }
-                        },
-                //si no va a hacer nada quitar el onclick
-                navigationIcon = {
-                    IconButton(onClick = { /* acción */ }) {
-                        Icon(painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "logo",
-                            modifier = Modifier.size(50.dp),
-                            tint = Color.White
+                        Text(
+                            text = "Filas virtuales",
+                            color = Color.White,
+                            fontStyle = FontStyle.Italic
                         )
                     }
                 },
 
-                ///establecer menu lateral para las notis y para el logout
-                actions = {
-                    IconButton(onClick = { /* acción */ }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Opciones", tint = Color.White)
-                    }
+                navigationIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "logo",
+                        modifier = Modifier
+                            .padding(start = 12.dp).size(50.dp),
+                        tint = Color.White
+                    )
                 },
+
                 backgroundColor = primary
             )
         },
@@ -126,18 +118,42 @@ fun BotttomBar() {
                     onClick = { navController.navigate(ROUTE_SCAN) { launchSingleTop = true } },
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(painter = painterResource(id = R.drawable.qr), contentDescription = "Scan", modifier = Modifier.size(24.dp))
+                            Icon(
+                                painter = painterResource(id = R.drawable.qr),
+                                contentDescription = "Scan",
+                                modifier = Modifier.size(24.dp)
+                            )
                             Text(text = "Escanear")
                         }
                     },
                 )
+                /*
                 NavigationBarItem(
                     selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_ROWS,
                     onClick = { navController.navigate(ROUTE_ROWS) { launchSingleTop = true } },
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(painter = painterResource(id = R.drawable.rows), contentDescription = "Rows", modifier = Modifier.size(24.dp))
+                            Icon(
+                                painter = painterResource(id = R.drawable.rows),
+                                contentDescription = "Rows",
+                                modifier = Modifier.size(24.dp)
+                            )
                             Text(text = "Mis filas")
+                        }
+                    }
+                )
+                 */
+                NavigationBarItem(
+                    selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_CREATE,
+                    onClick = { navController.navigate(ROUTE_CREATE) { launchSingleTop = true } },
+                    icon = {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.business),
+                                contentDescription = "Business",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text(text = "Crear")
                         }
                     }
                 )
@@ -146,8 +162,12 @@ fun BotttomBar() {
                     onClick = { navController.navigate(ROUTE_MANAGE) { launchSingleTop = true } },
                     icon = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(painter = painterResource(id = R.drawable.business), contentDescription = "Business", modifier = Modifier.size(24.dp))
-                            Text(text = "Negocio")
+                            Icon(
+                                painter = painterResource(id = R.drawable.rows),
+                                contentDescription = "Business",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text(text = "Gestionar")
                         }
                     }
                 )
@@ -162,17 +182,21 @@ fun BotttomBar() {
             modifier = Modifier.padding(innerpadding)
         ) {
             composable(ROUTE_HOME) {
-                Home(onOpenScan = { navController.navigate(ROUTE_SCAN) },
-                    onOpenManage = {navController.navigate(ROUTE_MANAGE)})
+                Home(
+                    onOpenScan = { navController.navigate(ROUTE_SCAN) },
+                    onOpenManage = { navController.navigate(ROUTE_MANAGE) },
+                    viewModel = filaViewModel
+                )
             }
+            /*
             composable(ROUTE_ROWS) {
-                Rows()
+                Rows(viewModel = filaViewModel)
             }
-
-            composable(ROUTE_MANAGE) {
-                Manage(
+*/
+            composable(ROUTE_CREATE) {
+                Create(
                     viewModel = filaViewModel,
-                    onInsert = {texto,a,b,c,d ->
+                    onInsert = { texto, a, b, c, d ->
                         //filaViewModel.insertarFila(texto,a)
                     }
                 )
@@ -182,10 +206,17 @@ fun BotttomBar() {
                 Scan(
                     viewModel = filaViewModel,
                     items = sample,
-                    onScan = {navController.navigate(ROUTE_CAMERA)},
+                    onScan = { navController.navigate(ROUTE_CAMERA) },
                     scannedCode = scannedCode,
-                    onJoin = { navController.navigate(ROUTE_ROWS) }
+                    onJoin = {
+                        scannedCode = ""
+                        navController.navigate(ROUTE_ROWS)
+                    }
                 )
+            }
+
+            composable(ROUTE_MANAGE) {
+                Manage(filaViewModel)
             }
 
             composable(ROUTE_CAMERA) {

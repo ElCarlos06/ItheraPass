@@ -4,7 +4,7 @@ data class Fila(
     val id: Int,
     val nombre: String,
     val categoria: String,
-    var estado: EstadoFila,
+    var estado: String,
     var tiempoPromedioAtencion: Long,
 
     // Contadores para las vistas y la organizacion
@@ -13,8 +13,3 @@ data class Fila(
 
     val idPropietario: String   //union hacia el creador
 )
-
-// Enum para controlar el flujo
-enum class EstadoFila {
-    ABIERTA, PAUSADA, CERRADA
-}

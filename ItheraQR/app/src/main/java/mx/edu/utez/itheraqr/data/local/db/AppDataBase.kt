@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import mx.edu.utez.itheraqr.data.local.dao.FilaDao
 import mx.edu.utez.itheraqr.data.local.model.Fila
 
+//QRIthera2025
 @Database(entities = [Fila::class],
     version = 1,
     exportSchema = true)

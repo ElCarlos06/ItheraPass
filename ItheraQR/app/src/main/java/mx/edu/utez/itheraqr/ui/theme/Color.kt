@@ -8,6 +8,11 @@ val tertiary = Color(0xFF000000)
 
 val darkText = Color(0xFF000000)
 val lightText = Color(0xFFFFFFFF)
+
+val darkBackground = Color(0xFF000000)
+val lightBackground = Color(0xFFFFFFFF)
+
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
