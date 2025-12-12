@@ -2,7 +2,6 @@ package mx.edu.utez.itheraqr.ui.screens.components.manage
 
 import android.graphics.Bitmap
 import android.widget.Toast
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

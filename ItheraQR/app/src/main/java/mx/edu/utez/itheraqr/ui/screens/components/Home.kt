@@ -6,7 +6,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +40,7 @@ fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}, viewModel: 
         "Espera cómodamente donde quieras"
     )
 
-    val filas by viewModel.listaFilas.collectAsState()
+    val filas by viewModel.misFilasActivas.collectAsState()
 
     // Cargar datos al entrar
     LaunchedEffect(Unit) {
@@ -94,12 +99,18 @@ fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}, viewModel: 
 
         item {
 
-            Text(
-                text = "Mis Turnos Activos",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
-            )
+            Row {
+                Text(
+                    text = "Mis Turnos Activos",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                )
+                IconButton(onClick = { viewModel.cargarMisFilas() }) {
+                    Icon(Icons.Default.Refresh, contentDescription = "Recargar", tint = MaterialTheme.colorScheme.primary)
+                }
+            }
+
         }
 
         // 2. LISTA DINÁMICA DE FILAS

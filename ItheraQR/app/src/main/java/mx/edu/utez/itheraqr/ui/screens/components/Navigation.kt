@@ -210,7 +210,7 @@ fun BotttomBar() {
                     scannedCode = scannedCode,
                     onJoin = {
                         scannedCode = ""
-                        navController.navigate(ROUTE_ROWS)
+                        navController.navigate(ROUTE_HOME)
                     }
                 )
             }
