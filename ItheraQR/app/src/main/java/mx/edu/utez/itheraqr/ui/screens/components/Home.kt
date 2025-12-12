@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,29 +16,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mx.edu.utez.itheraqr.R
-import mx.edu.utez.itheraqr.ui.screens.components.rows.FilaCard
-import mx.edu.utez.itheraqr.ui.screens.home.ActionCard
+import mx.edu.utez.itheraqr.ui.screens.components.navigation.EmptyStateCard
+import mx.edu.utez.itheraqr.ui.screens.components.home.FilaCard
+import mx.edu.utez.itheraqr.ui.screens.components.home.ActionCard
 import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
 import mx.edu.utez.itheraqr.ui.theme.primary
 import mx.edu.utez.itheraqr.ui.theme.secondary
+import mx.edu.utez.itheraqr.utils.NotificationHelper
 
 @Composable
-fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}, viewModel: FilaViewModel) {
+fun Home(
+    onOpenScan: () -> Unit = {}, 
+    onOpenManage: () -> Unit = {}, 
+    viewModel: FilaViewModel,
+    onFilaClick: ((Int) -> Unit)? = null
+) {
     //Lista de pasos optimizada
     val pasosUso = listOf(
         "Escanea el código QR del negocio",
         "Espera cómodamente donde quieras"
     )
 
-    val filas by viewModel.listaFilas.collectAsState()
+    val misFilas by viewModel.misFilasActivas.collectAsState()
 
-    // Cargar datos al entrar
+    // Cargar datos al entrar y cada 5 segundos para verificar cambios
     LaunchedEffect(Unit) {
-        viewModel.cargarFilas()
+        viewModel.cargarMisFilas()
+        // Polling cada 5 segundos para verificar si el turno cambió
+        while (true) {
+            kotlinx.coroutines.delay(5000)
+            viewModel.cargarMisFilas()
+        }
     }
 
     LazyColumn(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
@@ -102,34 +112,26 @@ fun Home(onOpenScan: () -> Unit = {}, onOpenManage: () -> Unit = {}, viewModel: 
             )
         }
 
-        // 2. LISTA DINÁMICA DE FILAS
-        if (filas.isEmpty()) {
+        // 2. LISTA DINÁMICA DE MIS FILAS
+        if (misFilas.isEmpty()) {
             item {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("No estás formado en ninguna fila.", color = Color.Gray)
-                        Text(
-                            "¡Usa el escáner para unirte!",
-                            fontWeight = FontWeight.Bold,
-                            color = primary
-                        )
-                    }
-                }
+                EmptyStateCard(
+                    message = "No estás formado en ninguna fila.",
+                    actionText = "¡Usa el escáner para unirte!",
+                    onAction = onOpenScan
+                )
+
+                NotificationHelper.stopCallAlarm()
             }
         } else {
-            items(filas) { fila ->
+            items(misFilas) { fila ->
                 // Reutilizamos tu FilaCard de la pantalla Rows para consistencia
                 // O puedes crear una "MiTurnoCard" simplificada si prefieres
-                FilaCard(fila)
-
-
+                FilaCard(
+                    fila = fila,
+                    onClick = { onFilaClick?.invoke(fila.id) }
+                )
+                Spacer(modifier = Modifier.height(12.dp))
             }
         }
     }

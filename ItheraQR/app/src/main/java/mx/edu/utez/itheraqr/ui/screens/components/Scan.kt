@@ -1,8 +1,11 @@
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -10,10 +13,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import mx.edu.utez.itheraqr.data.local.UserSession
 import mx.edu.utez.itheraqr.data.network.model.Fila
 import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
+import mx.edu.utez.itheraqr.ui.theme.primary
 import mx.edu.utez.itheraqr.ui.theme.tertiary
 
 data class QueueItem(val name: String, val category: String, val inQueue: Int, val attended: Int)///pediente
@@ -119,36 +127,34 @@ fun Scan(
 
             }
         }
-/*      Ya no se ocupara en teoria xd
-        //textfield para la busqueda
-        item {
-            TextField(
-                value = query,
-                onValueChange = { query = it },
-                placeholder = { Text("Buscar negocios...") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Text(text = "Filas Registradas", fontSize = 18.sp)
+
+        val pasosUso = listOf(
+            "Sie res nuevo Concede el permiso de la camara",
+            "Oprime el botón \n\"Escanear código de la fila\"",
+            "Escanea el código QR del negocio",
+            "Espera tu turno en la fila"
+        )
+        itemsIndexed(pasosUso) { index, paso ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "${index + 1}", color = Color.White)
+                }
+                Spacer(Modifier.width(12.dp))
+                Text(text = paso)
+            }
+
         }
 
-        //sistema para filtrar las busquedas
-        val filtered = if (query.isBlank()) items else items.filter {
-            it.name.contains(query, true) || it.category.contains(query, true)
-        }
-        //items como foreach en el lazy
 
-*/
-        //quitar esto es de prueba
-        // último item: mostrar el código escaneado (solo para comprobación lo voy a quitar w)
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            val textToShow = scannedCode ?: "No se ha escaneado ningún QR aún"
-            Text(text = "Último QR leído: $textToShow", modifier = Modifier.padding(vertical = 8.dp))
-        }
-
-        item {
-        }
     }
 
 
@@ -171,26 +177,17 @@ fun Scan(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     OutlinedTextField(
-                        label = {Text("Ingresa tu nombre para el turno:")},
+                        label = {Text("Ingresa tu nombre")},
                         value = userName,
                         onValueChange = { userName = it },
                         placeholder = { Text("Ej. Alberto Peralta") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors()
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // CAMPO CORREO (¡NUEVO!)
-                    OutlinedTextField(
-                        value = userEmail,
-                        onValueChange = { userEmail = it },
-                        label = { Text("Correo Electrónico") },
-                        placeholder = { Text("ejemplo@correo.com") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
-                    )
                 }
             },
             confirmButton = {
@@ -211,7 +208,8 @@ fun Scan(
                         } else {
                             Toast.makeText(context, "Escribe un nombre", Toast.LENGTH_SHORT).show()
                         }
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = primary)
                 ) {
                     Text("Formarse")
                 }
@@ -220,7 +218,8 @@ fun Scan(
                 TextButton(onClick = { showDialog = false }) {
                     Text("Cancelar")
                 }
-            }
+            },
+            backgroundColor =  MaterialTheme.colorScheme.background
         )
     }
 

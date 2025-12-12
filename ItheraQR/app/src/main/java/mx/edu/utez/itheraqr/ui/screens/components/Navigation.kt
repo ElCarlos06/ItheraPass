@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.IconButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -18,6 +16,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,10 +36,10 @@ import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.itheraqr.R
 import mx.edu.utez.itheraqr.data.network.model.Fila
 import mx.edu.utez.itheraqr.ui.components.ScanCamera
-import mx.edu.utez.itheraqr.ui.screens.components.manage.Create
-import mx.edu.utez.itheraqr.ui.screens.components.manage.Manage
 import mx.edu.utez.itheraqr.ui.screens.viewmodel.FilaViewModel
 import mx.edu.utez.itheraqr.ui.theme.primary
+import androidx.compose.runtime.collectAsState
+import mx.edu.utez.itheraqr.ui.screens.components.navigation.FilaDetailScreen
 
 //valores de navegacion
 private const val ROUTE_HOME = "home"
@@ -49,11 +48,12 @@ private const val ROUTE_ROWS = "rows"
 private const val ROUTE_CREATE = "create"
 private const val ROUTE_CAMERA = "camera"
 private const val ROUTE_MANAGE = "manage"
+private const val ROUTE_FILA_DETAIL = "fila_detail/{filaId}"
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BotttomBar() {
+fun Navigation() {
     //uso del nav
     val navController = rememberNavController()
     // guardar el qr
@@ -127,22 +127,7 @@ fun BotttomBar() {
                         }
                     },
                 )
-                /*
-                NavigationBarItem(
-                    selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_ROWS,
-                    onClick = { navController.navigate(ROUTE_ROWS) { launchSingleTop = true } },
-                    icon = {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.rows),
-                                contentDescription = "Rows",
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Text(text = "Mis filas")
-                        }
-                    }
-                )
-                 */
+
                 NavigationBarItem(
                     selected = navController.currentBackStackEntryAsState().value?.destination?.route == ROUTE_CREATE,
                     onClick = { navController.navigate(ROUTE_CREATE) { launchSingleTop = true } },
@@ -185,14 +170,13 @@ fun BotttomBar() {
                 Home(
                     onOpenScan = { navController.navigate(ROUTE_SCAN) },
                     onOpenManage = { navController.navigate(ROUTE_MANAGE) },
-                    viewModel = filaViewModel
+                    viewModel = filaViewModel,
+                    onFilaClick = { filaId ->
+                        navController.navigate("fila_detail/$filaId")
+                    }
                 )
             }
-            /*
-            composable(ROUTE_ROWS) {
-                Rows(viewModel = filaViewModel)
-            }
-*/
+
             composable(ROUTE_CREATE) {
                 Create(
                     viewModel = filaViewModel,
@@ -210,7 +194,7 @@ fun BotttomBar() {
                     scannedCode = scannedCode,
                     onJoin = {
                         scannedCode = ""
-                        navController.navigate(ROUTE_ROWS)
+                        navController.navigate(ROUTE_HOME)
                     }
                 )
             }
@@ -230,6 +214,28 @@ fun BotttomBar() {
                         navController.popBackStack()
                     }
                 )
+            }
+            
+            composable(ROUTE_FILA_DETAIL) { backStackEntry ->
+                val filaId = backStackEntry.arguments?.getString("filaId")?.toIntOrNull()
+                val fila = if (filaId != null) {
+                    // Buscar la fila en misFilasActivas o listaFilas
+                    (filaViewModel.misFilasActivas.collectAsState().value + filaViewModel.listaFilas.collectAsState().value)
+                        .firstOrNull { it.id == filaId }
+                } else null
+                
+                if (fila != null) {
+                    FilaDetailScreen(
+                        fila = fila,
+                        viewModel = filaViewModel,
+                        onBack = { navController.popBackStack() }
+                    )
+                } else {
+                    // Si no se encuentra la fila, volver atrás
+                    LaunchedEffect(Unit) {
+                        navController.popBackStack()
+                    }
+                }
             }
 
         }

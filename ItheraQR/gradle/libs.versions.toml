@@ -21,6 +21,7 @@ roomCompiler = "2.8.4"
 roomKtx = "2.8.4"
 roomRuntime = "2.8.4"
 volley = "1.2.1"
+runtime = "1.10.0"
 
 [libraries]
 androidx-activity-compose-v172 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -54,6 +55,7 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

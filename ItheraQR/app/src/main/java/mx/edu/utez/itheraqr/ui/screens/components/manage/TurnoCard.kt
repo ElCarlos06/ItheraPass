@@ -22,10 +22,9 @@ import mx.edu.utez.itheraqr.data.network.model.Turno
 @Composable
 fun TurnoCard(turno: Turno) {
     // CAMBIO: Comparamos String
-    val isActive = turno.estado == "ATENDIENDO" || turno.estado == "LLAMANDO"
-    val bgColor = if (isActive) MaterialTheme.colorScheme.primaryContainer else Color.White
+    val isActive = turno.estado == "ATENDIENDO"
 
-    Card(colors = CardDefaults.cardColors(containerColor = bgColor), elevation = CardDefaults.cardElevation(if (isActive) 8.dp else 2.dp), modifier = Modifier.fillMaxWidth()) {
+    Card(elevation = CardDefaults.cardElevation(if (isActive) 8.dp else 2.dp), modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(modifier = Modifier.size(40.dp).clip(CircleShape).background(if (isActive) MaterialTheme.colorScheme.primary else Color.LightGray), contentAlignment = Alignment.Center) {
@@ -35,6 +34,7 @@ fun TurnoCard(turno: Turno) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text(text = turno.nombreUsuario, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    // El código ya es solo el número
                     Text(text = "Turno: ${turno.codigoTurno}", color = Color.Gray, fontSize = 14.sp)
                 }
             }
